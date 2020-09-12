@@ -103,19 +103,27 @@ namespace Hazard_Detection
                     // add F stage
                     cpu.Stalled[i].Add('F');
 
+                    // if the current instruction is an R Type
                     if (cpu.Pipeline[i] is App.RType)
                     {
+                        // cast as R Type
                         var tempInst = cpu.Pipeline[i] as App.RType;
 
+                        // start count at 1
                         int count = 1;
 
+                        // check 4 instructions back
                         while (i - count >= 0 && count < 4)
                         {
+                            // if there is a RAW hazard
                             if (cpu.Pipeline[i - count].destReg == tempInst.srcReg1 || cpu.Pipeline[i - count].destReg == tempInst.srcReg2)
                             {
+                                // check instruction for when register is needed
                                 char need = cpu.Pipeline[i].normNeeded;
+                                // check instructino for when register is available
                                 char avail = cpu.Pipeline[i - count].normAvail;
 
+                                // use needNum to find difference
                                 int needNum;
 
                                 switch(need)
@@ -140,7 +148,7 @@ namespace Hazard_Detection
                                         break;
                                 }
 
-                                // only have F right now, so need to figure out what steps we need to align
+                                // only have F right now, so calculate how many spaces needed based on F index
                                 int j = cpu.Stalled[i].FindIndex(item => item == 'F');
                                 j += needNum;
 
@@ -148,6 +156,7 @@ namespace Hazard_Detection
 
                                 int diff = k - j;
 
+                                // add stalls
                                 for (int n = 0; n < diff; n++)
                                 {
                                     cpu.Stalled[i].Add('?');
@@ -155,12 +164,11 @@ namespace Hazard_Detection
                             }
                             count++;
                         }
+                        // add rest of stages
                         cpu.Stalled[i].Add('D');
                         cpu.Stalled[i].Add('X');
                         cpu.Stalled[i].Add('M');
                         cpu.Stalled[i].Add('W');
-
-                        
                     }
                 }
             }
