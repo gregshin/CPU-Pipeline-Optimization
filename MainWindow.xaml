@@ -1,0 +1,17 @@
+﻿<Window x:Class="Hazard_Detection.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hazard_Detection"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="480">
+    <Grid>
+        <StackPanel>
+            <TextBox Height="200" x:Name="mips" Margin="5" AcceptsReturn="True" FontFamily="Consolas" FontSize="14" />
+            <Button x:Name="submit" Height="25" Width="100" Content="submit" Click="submit_Click" />
+            <ListBox Height="200" x:Name="notOpt" Margin="5" FontFamily="Consolas" FontSize="14" />
+            <ListBox Height="200" x:Name="opt" Margin="5" FontFamily="Consolas" FontSize="14" />
+        </StackPanel>
+    </Grid>
+</Window>
