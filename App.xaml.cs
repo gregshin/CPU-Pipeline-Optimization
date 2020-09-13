@@ -18,29 +18,20 @@ namespace Hazard_Detection
         {
             public Cpu()
             {
-                //r1 = 0;
-                //r2 = 0;
-                //r3 = 0;
-                //r4 = 0;
-                //r5 = 0;
-
+                // init lists
                 Pipeline = new List<Instruction>();
                 Stalled = new List<List<char>>();
                 Forwarding = new List<List<char>>();
             }
 
-            //public int r1;
-            //public int r2;
-            //public int r3;
-            //public int r4;
-            //public int r5;
-
             // holds pipeline instructions
             public List<Instruction> Pipeline;
+            // holds stalled instructions
             public List<List<char>> Stalled;
+            // holds forwarded instructions
             public List<List<char>> Forwarding;
         }
-
+        // base class instruction
         public class Instruction
         {
             public Instruction(string inst, string r1, string r2)
@@ -55,7 +46,7 @@ namespace Hazard_Detection
             public char forwAvail;
             public char forwNeed;
             public char normAvail;
-            public char normNeeded;
+            public char normNeed;
         }
 
         // models r-type instruction
@@ -65,7 +56,7 @@ namespace Hazard_Detection
             {
                 srcReg2 = r3;
                 normAvail = 'W';
-                normNeeded = 'D';
+                normNeed = 'D';
                 forwAvail = 'M';
                 forwNeed = 'X';
             }
@@ -90,11 +81,11 @@ namespace Hazard_Detection
                 forwAvail = 'M'; // avail after execution
                 forwNeed = 'X'; // needed before execution
                 normAvail = 'W';
-                normNeeded = 'D';
+                normNeed = 'D';
             }
             string offset;
         }
-
+        // special class for load instructions
         public class Load : Mem
         {
             public Load(string inst, string r1, string r2, string off) : base(inst, r1, r2, off)
@@ -102,17 +93,23 @@ namespace Hazard_Detection
                 forwAvail = 'W'; // avail after mem access
                 forwNeed = 'M';
                 normAvail = 'W';
-                normNeeded = 'D';
+                normNeed = 'D';
             }
         }
-
+        // special class for store instructions
         public class Store : Mem
         {
-            public Store(string inst, string r1, string r2, string off) : base(inst, r1, r2, off)
+            public Store(string inst, string r1, string r2, string off) : base(inst, "null", r1, off)
             {
-                forwAvail = 'W'; // avail after mem access
+                forwAvail = 'M'; // avail after mem access
                 forwNeed = 'X'; // ALU calculates the effective address
+                normAvail = 'M';
+                normNeed = 'D';
+
+                srcReg2 = r2;
             }
+
+            public string srcReg2;
         }
     }
 }

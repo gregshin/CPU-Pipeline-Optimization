@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hazard_Detection"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="480">
+        Title="MainWindow" Height="775" Width="600">
     <Grid>
         <StackPanel>
-            <TextBox Height="200" x:Name="mips" Margin="5" AcceptsReturn="True" FontFamily="Consolas" FontSize="14" />
+            <TextBox Height="225" x:Name="mips" Margin="5" AcceptsReturn="True" FontFamily="Consolas" FontSize="18" />
             <Button x:Name="submit" Height="25" Width="100" Content="submit" Click="submit_Click" />
-            <ListBox Height="200" x:Name="notOpt" Margin="5" FontFamily="Consolas" FontSize="14" />
-            <ListBox Height="200" x:Name="opt" Margin="5" FontFamily="Consolas" FontSize="14" />
+            <ListBox Height="225" x:Name="notOpt" Margin="5" FontFamily="Consolas" FontSize="18" />
+            <ListBox Height="225" x:Name="opt" Margin="5" FontFamily="Consolas" FontSize="18" />
         </StackPanel>
     </Grid>
 </Window>
