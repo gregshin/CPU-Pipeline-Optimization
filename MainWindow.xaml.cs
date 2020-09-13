@@ -602,5 +602,17 @@ namespace Hazard_Detection
             }
         }
 
+        private void clear_Click(object sender, RoutedEventArgs e)
+        {
+            // clear gui elements
+            mips.Clear();
+            notOpt.Items.Clear();
+            opt.Items.Clear();
+
+            // clear all lists
+            cpu.Pipeline.Clear();
+            cpu.Stalled.Clear();
+            cpu.Forwarding.Clear();
+        }
     }
 }

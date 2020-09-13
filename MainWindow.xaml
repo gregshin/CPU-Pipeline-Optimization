@@ -8,10 +8,34 @@
         Title="MainWindow" Height="775" Width="600">
     <Grid>
         <StackPanel>
-            <TextBox Height="225" x:Name="mips" Margin="5" AcceptsReturn="True" FontFamily="Consolas" FontSize="18" />
-            <Button x:Name="submit" Height="25" Width="100" Content="submit" Click="submit_Click" />
-            <ListBox Height="225" x:Name="notOpt" Margin="5" FontFamily="Consolas" FontSize="18" />
-            <ListBox Height="225" x:Name="opt" Margin="5" FontFamily="Consolas" FontSize="18" />
+            <Grid Height="225" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="5*" />
+                </Grid.ColumnDefinitions>
+                <Label Content="MIPS Instructions" Grid.Column="0" Margin="0,100,0,0" />
+                <TextBox x:Name="mips" AcceptsReturn="True" FontFamily="Consolas" FontSize="18" Grid.Column="1" />
+            </Grid>
+            <Grid>
+                <Button x:Name="submit" Height="25" Width="100" Content="submit" Click="submit_Click" Margin="0, 0, 100, 0" />
+                <Button x:Name="clear" Height="25" Width="100" Content="clear" Margin="300, 0, 0, 0" Click="clear_Click" />
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="5*" />
+                </Grid.ColumnDefinitions>
+                <Label Content="Unoptimized" Grid.Column="0" Margin="0,100,0,0" />
+                <ListBox Height="225" x:Name="notOpt" Margin="5" FontFamily="Consolas" FontSize="18" Grid.Column="1"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="5*" />
+                </Grid.ColumnDefinitions>
+                <Label Content="Optimized" Grid.Column="0" Margin="0,100,0,0" />
+                <ListBox Height="225" x:Name="opt" Margin="5" FontFamily="Consolas" FontSize="18" Grid.Column="1" />
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>
