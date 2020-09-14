@@ -26,9 +26,23 @@ namespace Hazard_Detection
             InitializeComponent();
 
             cpu = new App.Cpu();
+
+            printValidInst();
         }
 
         public App.Cpu cpu;
+
+        private void printValidInst()
+        {
+            dispInst.Items.Add("add");
+            dispInst.Items.Add("sub");
+            dispInst.Items.Add("div");
+            dispInst.Items.Add("mult");
+            dispInst.Items.Add("and");
+            dispInst.Items.Add("or");
+            dispInst.Items.Add("lw");
+            dispInst.Items.Add("sw");
+        }
 
         private void submit_Click(object sender, RoutedEventArgs e)
         {
@@ -165,6 +179,8 @@ namespace Hazard_Detection
                                     {
                                         cpu.Stalled[i].Add('-');
                                     }
+
+                                    cpu.Hazards.Add("RAW Hazard Detected on lines " + (i - count) + " and " + i);
                                 }
                             }
                             count++;
@@ -237,6 +253,8 @@ namespace Hazard_Detection
                                     {
                                         cpu.Stalled[i].Add('-');
                                     }
+
+                                    cpu.Hazards.Add("RAW Hazard Detected on lines " + (i - count) + " and " + i);
                                 }
                             }
                             count++;
@@ -309,6 +327,8 @@ namespace Hazard_Detection
                                     {
                                         cpu.Stalled[i].Add('-');
                                     }
+
+                                    cpu.Hazards.Add("RAW Hazard Detected on lines " + (i - count) + " and " + i);
                                 }
                             }
                             count++;
@@ -601,7 +621,78 @@ namespace Hazard_Detection
                 opt.Items.Add(line);
             }
         }
+        // print hazards to main window
+        public void printHazards(ref App.Cpu cpu)
+        {
 
+        }
+        // method to detect all hazards
+        public void detectHazard(ref App.Cpu cpu)
+        {
+            // iterate through the pipeline
+            for (int i = 0; i < cpu.Pipeline.Count(); i++)
+            {
+                string currDest = null;
+                string currSrcReg1 = null;
+                string currSrcReg2 = null;
+                string pastDest = null;
+                string pastSrcReg1 = null;
+                string pastSrcReg2 = null;
+
+                if (cpu.Pipeline[i] is App.RType rtype)
+                {
+                    currDest = rtype.destReg;
+                    currSrcReg1 = rtype.srcReg1;
+                    currSrcReg2 = rtype.srcReg2;                    
+                }
+                else if (cpu.Pipeline[i] is App.Load load)
+                {
+                    currDest = load.destReg;
+                    currSrcReg1 = load.srcReg1;
+                    currSrcReg2 = null;
+                }
+                else if (cpu.Pipeline[i] is App.Store store)
+                {
+                    currDest = null;
+                    currSrcReg1 = store.srcReg1;
+                    currSrcReg2 = store.srcReg2;
+                }
+
+                int count = 1;
+
+                while (i - count >= 0 && count < 4)
+                {
+                    if (cpu.Pipeline[i-count] is App.RType rtypePrev)
+                    {
+                        pastDest = rtypePrev.destReg;
+                        pastSrcReg1 = rtypePrev.srcReg1;
+                        pastSrcReg2 = rtypePrev.srcReg2;
+                    }
+                    else if (cpu.Pipeline[i-count] is App.Load loadPrev)
+                    {
+                        pastDest = loadPrev.destReg;
+                        pastSrcReg1 = loadPrev.srcReg1;
+                        pastSrcReg2 = null;
+                    }
+                    else if (cpu.Pipeline[i-count] is App.Store storePrev)
+                    {
+                        pastDest = null;
+                        pastSrcReg1 = storePrev.srcReg1;
+                        pastSrcReg1 = storePrev.srcReg2;
+                    }
+                    // need to rewrite this
+                    if (currDest == pastSrcReg1 || currDest == pastSrcReg2)
+                    {
+                        cpu.Hazards.Add("WAR Hazard Detected on lines " + (i - count) + " and " + i);
+                    }
+                    else if (currDest == pastDest || count == 1)
+                    {
+                        cpu.Hazards.Add("WAW Hazard Detected on lines " + (i - count) + " and " + i);
+                    }
+ 
+                }
+            }
+        }
         private void clear_Click(object sender, RoutedEventArgs e)
         {
             // clear gui elements

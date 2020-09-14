@@ -5,37 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hazard_Detection"
         mc:Ignorable="d"
-        Title="MainWindow" Height="775" Width="600">
+        Title="MainWindow" Height="980" Width="1400">
     <Grid>
         <StackPanel>
-            <Grid Height="225" Margin="5">
+            <DockPanel Margin="5">
+                <Button x:Name="submit" Height="25" Width="100" Content="submit" Click="submit_Click" DockPanel.Dock="Left" Margin="25,0,0,0"/>
+                <Button x:Name="clear" Height="25" Width="100" Content="clear" Click="clear_Click" DockPanel.Dock="Left" Margin="25,0,0,0"/>
+                <Rectangle Width="500"/>
+            </DockPanel>
+            <Grid Height="600" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
-                <Label Content="MIPS Instructions" Grid.Column="0" Margin="0,100,0,0"/>
-                <TextBox x:Name="mips" AcceptsReturn="True" FontFamily="Consolas" FontSize="18" Grid.Column="1" />
+                <DockPanel Grid.Column="0">
+                    <Label Content="Valid Instructions" FontSize="14" DockPanel.Dock="Top"/>
+                    <ListBox x:Name="dispInst" FontFamily="Consolas" FontSize="16" Margin="5" DockPanel.Dock="Bottom"/>
+                </DockPanel>
+                <DockPanel Grid.Column="1">
+                    <Label Content="User Input" FontSize="14" DockPanel.Dock="Top" />
+                    <TextBox x:Name="mips" AcceptsReturn="True" FontFamily="Consolas" FontSize="18" Margin="5" DockPanel.Dock="Bottom"  />
+                </DockPanel>
+                <DockPanel Grid.Column="2">
+                    <Label Content="Unoptimized" FontSize="14" DockPanel.Dock="Top" />
+                    <ListBox x:Name="notOpt" FontFamily="Consolas" FontSize="18" Margin="5" DockPanel.Dock="Bottom" />
+                </DockPanel>
+                <DockPanel Grid.Column="3">
+                    <Label Content="Optimized" FontSize="14" DockPanel.Dock="Top" />
+                    <ListBox x:Name="opt" FontFamily="Consolas" FontSize="18" Margin="5" DockPanel.Dock="Bottom" />
+                </DockPanel>
             </Grid>
-            <Grid>
-                <Button x:Name="submit" Height="25" Width="100" Content="submit" Click="submit_Click" Margin="0, 0, 100, 0" />
-                <Button x:Name="clear" Height="25" Width="100" Content="clear" Margin="300, 0, 0, 0" Click="clear_Click" />
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="5*" />
-                </Grid.ColumnDefinitions>
-                <Label Content="Unoptimized" Grid.Column="0" Margin="20,100,0,0" />
-                <ListBox Height="225" x:Name="notOpt" Margin="5" FontFamily="Consolas" FontSize="18" Grid.Column="1"/>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="5*" />
-                </Grid.ColumnDefinitions>
-                <Label Content="Optimized" Grid.Column="0" Margin="30,100,0,0" />
-                <ListBox Height="225" x:Name="opt" Margin="5" FontFamily="Consolas" FontSize="18" Grid.Column="1" />
-            </Grid>
+            <DockPanel Margin="5,0,5,5" Height="295">
+                <Label Content="Warnings" FontSize="14" DockPanel.Dock="Top" />
+                <ListBox x:Name="warn" FontFamily="Consolas" FontSize="18" Margin="5" DockPanel.Dock="Bottom" />
+            </DockPanel>
         </StackPanel>
     </Grid>
 </Window>

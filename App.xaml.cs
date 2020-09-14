@@ -22,6 +22,7 @@ namespace Hazard_Detection
                 Pipeline = new List<Instruction>();
                 Stalled = new List<List<char>>();
                 Forwarding = new List<List<char>>();
+                Hazards = new List<string>();
             }
 
             // holds pipeline instructions
@@ -30,6 +31,8 @@ namespace Hazard_Detection
             public List<List<char>> Stalled;
             // holds forwarded instructions
             public List<List<char>> Forwarding;
+            // holds identified hazards
+            public List<string> Hazards;
         }
         // base class instruction
         public class Instruction
