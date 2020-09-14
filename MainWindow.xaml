@@ -29,16 +29,16 @@
                     <TextBox x:Name="mips" AcceptsReturn="True" FontFamily="Consolas" FontSize="18" Margin="5" DockPanel.Dock="Bottom"  />
                 </DockPanel>
                 <DockPanel Grid.Column="2">
-                    <Label Content="Unoptimized" FontSize="14" DockPanel.Dock="Top" />
+                    <Label Content="Without Forwarding" FontSize="14" DockPanel.Dock="Top" />
                     <ListBox x:Name="notOpt" FontFamily="Consolas" FontSize="18" Margin="5" DockPanel.Dock="Bottom" />
                 </DockPanel>
                 <DockPanel Grid.Column="3">
-                    <Label Content="Optimized" FontSize="14" DockPanel.Dock="Top" />
+                    <Label Content="With Forwarding" FontSize="14" DockPanel.Dock="Top" />
                     <ListBox x:Name="opt" FontFamily="Consolas" FontSize="18" Margin="5" DockPanel.Dock="Bottom" />
                 </DockPanel>
             </Grid>
             <DockPanel Margin="5,0,5,5" Height="295">
-                <Label Content="Warnings" FontSize="14" DockPanel.Dock="Top" />
+                <Label Content="Hazards" FontSize="14" DockPanel.Dock="Top" />
                 <ListBox x:Name="warn" FontFamily="Consolas" FontSize="18" Margin="5" DockPanel.Dock="Bottom" />
             </DockPanel>
         </StackPanel>

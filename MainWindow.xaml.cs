@@ -86,6 +86,8 @@ namespace Hazard_Detection
             forward(ref cpu);
             printStalled(ref cpu);
             printForwarded(ref cpu);
+            printRAW(ref cpu);
+            printWAW(ref cpu);
         }
         // method to create pipeline with stalls
         public void stall(ref App.Cpu cpu)
@@ -622,77 +624,63 @@ namespace Hazard_Detection
             }
         }
         // print hazards to main window
-        public void printHazards(ref App.Cpu cpu)
+        public void printRAW(ref App.Cpu cpu)
         {
-
+            foreach (string s in cpu.Hazards)
+            {
+               warn.Items.Add(s);
+            }
         }
-        // method to detect all hazards
-        public void detectHazard(ref App.Cpu cpu)
+        // method to detect and print WAW hazards
+        private void printWAW(ref App.Cpu cpu)
         {
-            // iterate through the pipeline
+            List<string> waw = new List<string>();
+            
+            // iterate through the instructino list
             for (int i = 0; i < cpu.Pipeline.Count(); i++)
             {
-                string currDest = null;
-                string currSrcReg1 = null;
-                string currSrcReg2 = null;
-                string pastDest = null;
-                string pastSrcReg1 = null;
-                string pastSrcReg2 = null;
+                string currDest = cpu.Pipeline[i].destReg;
+                List<int> codeLine = new List<int>();
 
-                if (cpu.Pipeline[i] is App.RType rtype)
+                if (!waw.Contains(currDest))
                 {
-                    currDest = rtype.destReg;
-                    currSrcReg1 = rtype.srcReg1;
-                    currSrcReg2 = rtype.srcReg2;                    
-                }
-                else if (cpu.Pipeline[i] is App.Load load)
-                {
-                    currDest = load.destReg;
-                    currSrcReg1 = load.srcReg1;
-                    currSrcReg2 = null;
-                }
-                else if (cpu.Pipeline[i] is App.Store store)
-                {
-                    currDest = null;
-                    currSrcReg1 = store.srcReg1;
-                    currSrcReg2 = store.srcReg2;
-                }
+                    string wawList = "Warning: Potential WAW hazard on lines ";
 
-                int count = 1;
+                    waw.Add(currDest);
+                    // check all instructions that come later
+                    for (int n = i + 1; n < cpu.Pipeline.Count(); n++)
+                    {
+                        string nextDest = cpu.Pipeline[n].destReg;
 
-                while (i - count >= 0 && count < 4)
-                {
-                    if (cpu.Pipeline[i-count] is App.RType rtypePrev)
-                    {
-                        pastDest = rtypePrev.destReg;
-                        pastSrcReg1 = rtypePrev.srcReg1;
-                        pastSrcReg2 = rtypePrev.srcReg2;
+                        // if there is a WAW
+                        if (currDest == nextDest)
+                        {
+                            // if the current codeline isn't already in the list
+                            if (!codeLine.Contains(i))
+                            {
+                                // add that line to the list
+                                codeLine.Add(i);
+                            }
+                            // add future line to the list
+                            codeLine.Add(n);
+                        }
                     }
-                    else if (cpu.Pipeline[i-count] is App.Load loadPrev)
+                    // if the codeline list isn't empty
+                    if (codeLine.Count() > 0)
                     {
-                        pastDest = loadPrev.destReg;
-                        pastSrcReg1 = loadPrev.srcReg1;
-                        pastSrcReg2 = null;
+                        // iterate through and add to wawList
+                        foreach (int line in codeLine)
+                        {
+                            wawList += line + " ";
+                        }
+                        // add to the hazard warnings list
+                        warn.Items.Add(wawList);
                     }
-                    else if (cpu.Pipeline[i-count] is App.Store storePrev)
-                    {
-                        pastDest = null;
-                        pastSrcReg1 = storePrev.srcReg1;
-                        pastSrcReg1 = storePrev.srcReg2;
-                    }
-                    // need to rewrite this
-                    if (currDest == pastSrcReg1 || currDest == pastSrcReg2)
-                    {
-                        cpu.Hazards.Add("WAR Hazard Detected on lines " + (i - count) + " and " + i);
-                    }
-                    else if (currDest == pastDest || count == 1)
-                    {
-                        cpu.Hazards.Add("WAW Hazard Detected on lines " + (i - count) + " and " + i);
-                    }
- 
+                    
                 }
             }
         }
+
         private void clear_Click(object sender, RoutedEventArgs e)
         {
             // clear gui elements
