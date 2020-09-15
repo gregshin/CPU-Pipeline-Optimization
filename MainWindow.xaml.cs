@@ -439,8 +439,6 @@ namespace Hazard_Detection
 
                         while (safe == false && count <= 4 && i - count >= 0)
                         {
-                            //int k = cpu.Stalled[i - count].FindIndex(item => item == avail);
-
                             // what cycle mem acces is on previous cycle
                             int memAccess = cpu.Forwarding[i - count].FindIndex(item => item == 'M');
 
@@ -525,11 +523,6 @@ namespace Hazard_Detection
                             }
                             count++;
                         }
-                        // add rest of stages
-                        cpu.Forwarding[i].Add('D');
-                        cpu.Forwarding[i].Add('X');
-                        cpu.Forwarding[i].Add('M');
-                        cpu.Forwarding[i].Add('W');
                     }
 
                     // if the current instruction is load type
@@ -597,11 +590,6 @@ namespace Hazard_Detection
                             }
                             count++;
                         }
-                        // add rest of stages
-                        cpu.Forwarding[i].Add('D');
-                        cpu.Forwarding[i].Add('X');
-                        cpu.Forwarding[i].Add('M');
-                        cpu.Forwarding[i].Add('W');
                     }
 
                     // if the current instruction is store type
@@ -669,12 +657,12 @@ namespace Hazard_Detection
                             }
                             count++;
                         }
-                        // add rest of stages
-                        cpu.Forwarding[i].Add('D');
-                        cpu.Forwarding[i].Add('X');
-                        cpu.Forwarding[i].Add('M');
-                        cpu.Forwarding[i].Add('W');
                     }
+                    // add rest of stages
+                    cpu.Forwarding[i].Add('D');
+                    cpu.Forwarding[i].Add('X');
+                    cpu.Forwarding[i].Add('M');
+                    cpu.Forwarding[i].Add('W');
                 }
             }
         }
@@ -815,7 +803,6 @@ namespace Hazard_Detection
         private void clear_Click(object sender, RoutedEventArgs e)
         {
             // clear gui elements
-            mips.Clear();
             notOpt.Items.Clear();
             opt.Items.Clear();
             warn.Items.Clear();

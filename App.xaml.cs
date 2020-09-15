@@ -114,7 +114,6 @@ namespace Hazard_Detection
 
                 srcReg2 = r2;
             }
-
             public string srcReg2;
         }
     }
