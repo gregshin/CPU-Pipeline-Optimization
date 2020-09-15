@@ -35,9 +35,13 @@ namespace Hazard_Detection
         private void printValidInst()
         {
             dispInst.Items.Add("add");
+            dispInst.Items.Add("addi");
             dispInst.Items.Add("sub");
+            dispInst.Items.Add("subu");
             dispInst.Items.Add("div");
+            dispInst.Items.Add("divi");
             dispInst.Items.Add("mul");
+            dispInst.Items.Add("muli");
             dispInst.Items.Add("and");
             dispInst.Items.Add("or");
             dispInst.Items.Add("lw");
@@ -134,8 +138,37 @@ namespace Hazard_Detection
                     {
                         cpu.Stalled[i].Add(' ');
                     }
+
+                    // check if structural memory hazard exists
+                    if (cpu.separateMem == false)
+                    {
+                        int column = indent;
+                        int count = 1;
+                        bool safe = false;
+
+                        while (safe == false && count <= 4 && i - count >= 0)
+                        {
+                            //int k = cpu.Stalled[i - count].FindIndex(item => item == avail);
+
+                            // what cycle mem acces is on previous cycle
+                            int memAccess = cpu.Stalled[i - count].FindIndex(item => item == 'M');
+
+                            if (memAccess == column)
+                            {
+                                cpu.Stalled[i].Add('-');
+                                column++;
+                                count = 1;
+                            }
+                            else
+                            {
+                                count++;
+                            }
+                        }
+                    }
+
                     // add F stage
                     cpu.Stalled[i].Add('F');
+
 
                     // if the current instruction is an R Type
                     if (cpu.Pipeline[i] is App.RType)
@@ -147,7 +180,7 @@ namespace Hazard_Detection
                         int count = 1;
 
                         // check 4 instructions back
-                        while (i - count >= 0 && count < 4)
+                        while (i - count >= 0 && count <= 4)
                         {
                             // if there is a RAW hazard
                             if (cpu.Pipeline[i - count].destReg == tempInst.srcReg1 || cpu.Pipeline[i - count].destReg == tempInst.srcReg2)
@@ -381,6 +414,33 @@ namespace Hazard_Detection
                     {
                         cpu.Forwarding[i].Add(' ');
                     }
+
+                    if (cpu.separateMem == false)
+                    {
+                        int column = indent;
+                        int count = 1;
+                        bool safe = false;
+
+                        while (safe == false && count <= 4 && i - count >= 0)
+                        {
+                            //int k = cpu.Stalled[i - count].FindIndex(item => item == avail);
+
+                            // what cycle mem acces is on previous cycle
+                            int memAccess = cpu.Forwarding[i - count].FindIndex(item => item == 'M');
+
+                            if (memAccess == column)
+                            {
+                                cpu.Forwarding[i].Add('-');
+                                column++;
+                                count = 1;
+                            }
+                            else
+                            {
+                                count++;
+                            }
+                        }
+                    }
+
                     // add F stage
                     cpu.Forwarding[i].Add('F');
 
@@ -749,6 +809,15 @@ namespace Hazard_Detection
             cpu.Stalled.Clear();
             cpu.Forwarding.Clear();
             cpu.Hazards.Clear();
+        }
+
+        private void memToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            cpu.separateMem = true;
+        }
+        private void memToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            cpu.separateMem = false;
         }
     }
 }

@@ -11,6 +11,7 @@
             <DockPanel Margin="5">
                 <Button x:Name="submit" Height="25" Width="100" Content="submit" Click="submit_Click" DockPanel.Dock="Left" Margin="25,0,0,0"/>
                 <Button x:Name="clear" Height="25" Width="100" Content="clear" Click="clear_Click" DockPanel.Dock="Left" Margin="25,0,0,0"/>
+                <ToggleButton x:Name="memToggle" Content="Separate I/D Memory" DockPanel.Dock="Right" Checked="memToggle_Checked" Unchecked="memToggle_Unchecked"/>
                 <Rectangle Width="500"/>
             </DockPanel>
             <Grid Height="600" Margin="5">
