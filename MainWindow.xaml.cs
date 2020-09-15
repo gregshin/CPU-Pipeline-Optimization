@@ -24,14 +24,14 @@ namespace Hazard_Detection
         public MainWindow()
         {
             InitializeComponent();
-
+            // instantiate a new cpu object
             cpu = new App.Cpu();
-
+            // print out the valid instructions
             printValidInst();
         }
 
         public App.Cpu cpu;
-
+        // populate the valid instruction box
         private void printValidInst()
         {
             dispInst.Items.Add("add $r1, $r2, $r3");
@@ -50,7 +50,6 @@ namespace Hazard_Detection
 
         private void submit_Click(object sender, RoutedEventArgs e)
         {
-
             // split the user input by line breaks
             string[] inst = mips.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
@@ -129,6 +128,7 @@ namespace Hazard_Detection
         // method to create pipeline with stalls
         public void stall(ref App.Cpu cpu)
         {
+            // iterate through instructions
             for (int i = 0; i < cpu.Pipeline.Count; i++)
             {
                 // add new line to pipeline
@@ -181,10 +181,8 @@ namespace Hazard_Detection
                             }
                         }
                     }
-
                     // add F stage
                     cpu.Stalled[i].Add('F');
-
 
                     // if the current instruction is an R Type
                     if (cpu.Pipeline[i] is App.RType)
@@ -430,7 +428,7 @@ namespace Hazard_Detection
                     {
                         cpu.Forwarding[i].Add(' ');
                     }
-
+                    // add stalls if need if memory is unified
                     if (cpu.separateMem == false)
                     {
                         int column = indent;
@@ -812,11 +810,12 @@ namespace Hazard_Detection
             cpu.Forwarding.Clear();
             cpu.Hazards.Clear();
         }
-
+        // mem type toggle
         private void memToggle_Checked(object sender, RoutedEventArgs e)
         {
             cpu.separateMem = true;
         }
+        // mem type toggle
         private void memToggle_Unchecked(object sender, RoutedEventArgs e)
         {
             cpu.separateMem = false;

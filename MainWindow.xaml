@@ -23,7 +23,7 @@
                 </Grid.ColumnDefinitions>
                 <DockPanel Grid.Column="0">
                     <Label Content="Valid Instructions" FontSize="14" DockPanel.Dock="Top"/>
-                    <ListBox x:Name="dispInst" FontFamily="Consolas" FontSize="16" Margin="5" DockPanel.Dock="Bottom"/>
+                    <ListBox x:Name="dispInst" FontFamily="Consolas" FontSize="16" Margin="5" DockPanel.Dock="Bottom "/>
                 </DockPanel>
                 <DockPanel Grid.Column="1">
                     <Label Content="User Input" FontSize="14" DockPanel.Dock="Top" />
