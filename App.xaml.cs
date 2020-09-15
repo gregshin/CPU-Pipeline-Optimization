@@ -97,7 +97,7 @@ namespace Hazard_Detection
             public Load(string inst, string r1, string r2, string off) : base(inst, r1, r2, off)
             {
                 forwAvail = 'W'; // avail after mem access
-                forwNeed = 'M';
+                forwNeed = 'X';
                 normAvail = 'W';
                 normNeed = 'D';
             }
@@ -105,7 +105,7 @@ namespace Hazard_Detection
         // special class for store instructions
         public class Store : Mem
         {
-            public Store(string inst, string r1, string r2, string off) : base(inst, "null", r1, off)
+            public Store(string inst, string r1, string r2, string off) : base(inst, null, r1, off)
             {
                 forwAvail = 'M'; // avail after mem access
                 forwNeed = 'X'; // ALU calculates the effective address

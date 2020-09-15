@@ -383,7 +383,6 @@ namespace Hazard_Detection
                                     {
                                         cpu.Stalled[i].Add('-');
                                     }
-
                                     cpu.Hazards.Add("RAW Hazard Detected on lines " + (i - count) + " and " + i);
                                 }
                             }
@@ -713,7 +712,7 @@ namespace Hazard_Detection
                 string currDest = cpu.Pipeline[i].destReg;
                 List<int> codeLine = new List<int>();
 
-                if (!waw.Contains(currDest))
+                if (currDest != null && !waw.Contains(currDest))
                 {
                     string wawList = "Warning: Potential WAW hazard. The following lines have the same destination:";
 
@@ -776,7 +775,7 @@ namespace Hazard_Detection
                 {
                     string dest = cpu.Pipeline[n].destReg;
 
-                    if (i != n && (dest == currSrc1 || dest == currSrc2))
+                    if (i != n && (dest == currSrc1 || dest == currSrc2) && dest != null)
                     {
                         codeLine.Add(n);
                     }
