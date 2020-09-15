@@ -37,7 +37,7 @@ namespace Hazard_Detection
             dispInst.Items.Add("add");
             dispInst.Items.Add("sub");
             dispInst.Items.Add("div");
-            dispInst.Items.Add("mult");
+            dispInst.Items.Add("mul");
             dispInst.Items.Add("and");
             dispInst.Items.Add("or");
             dispInst.Items.Add("lw");
@@ -65,6 +65,22 @@ namespace Hazard_Detection
                 else if (parts[0] == "sub")
                 {
                     cpu.Pipeline.Add(new App.RType("sub", parts[1], parts[2], parts[3]));
+                }
+                else if (parts[0] == "div")
+                {
+                    cpu.Pipeline.Add(new App.RType("div", parts[1], parts[2], parts[3]));
+                }
+                else if (parts[0] == "mul")
+                {
+                    cpu.Pipeline.Add(new App.RType("mul", parts[1], parts[2], parts[3]));
+                }
+                else if (parts[0] == "and")
+                {
+                    cpu.Pipeline.Add(new App.RType("and", parts[1], parts[2], parts[3]));
+                }
+                else if (parts[0] == "or")
+                {
+                    cpu.Pipeline.Add(new App.RType("or", parts[1], parts[2], parts[3]));
                 }
                 else if (parts[0] == "lw")
                 {
@@ -188,11 +204,6 @@ namespace Hazard_Detection
                             }
                             count++;
                         }
-                        // add rest of stages
-                        cpu.Stalled[i].Add('D');
-                        cpu.Stalled[i].Add('X');
-                        cpu.Stalled[i].Add('M');
-                        cpu.Stalled[i].Add('W');
                     }
 
                     // if the current instruction is load type
@@ -262,11 +273,6 @@ namespace Hazard_Detection
                             }
                             count++;
                         }
-                        // add rest of stages
-                        cpu.Stalled[i].Add('D');
-                        cpu.Stalled[i].Add('X');
-                        cpu.Stalled[i].Add('M');
-                        cpu.Stalled[i].Add('W');
                     }
 
                     // if the current instruction is store type
@@ -336,12 +342,14 @@ namespace Hazard_Detection
                             }
                             count++;
                         }
-                        // add rest of stages
-                        cpu.Stalled[i].Add('D');
-                        cpu.Stalled[i].Add('X');
-                        cpu.Stalled[i].Add('M');
-                        cpu.Stalled[i].Add('W');
+
                     }
+
+                    // add rest of stages
+                    cpu.Stalled[i].Add('D');
+                    cpu.Stalled[i].Add('X');
+                    cpu.Stalled[i].Add('M');
+                    cpu.Stalled[i].Add('W');
                 }
             }
         }
@@ -647,7 +655,6 @@ namespace Hazard_Detection
                 {
                     string wawList = "Warning: Potential WAW hazard. The following lines have the same destination:";
 
-                    
                     // check all instructions that come later
                     for (int n = i + 1; n < cpu.Pipeline.Count(); n++)
                     {
@@ -691,9 +698,10 @@ namespace Hazard_Detection
             {
                 string currSrc1 = cpu.Pipeline[i].srcReg1;
                 string currSrc2 = null;
-                string output = "Warning: Potential WAR hazard. The following lines have a destination register that line ";
+                string output = "Warning: Potential WAR hazard. The following lines have a destination that line ";
                 List<int> codeLine = new List<int>();
 
+                // determine # of registers depending on instruction type
                 if (cpu.Pipeline[i] is App.RType rtype)
                 {
                     currSrc2 = rtype.srcReg2;
@@ -702,7 +710,7 @@ namespace Hazard_Detection
                 {
                     currSrc2 = store.srcReg2;
                 }
-
+                // iterate through the list again and compare destination outputs to source registers
                 for (int n = 0; n < cpu.Pipeline.Count(); n++)
                 {
                     string dest = cpu.Pipeline[n].destReg;
@@ -712,7 +720,7 @@ namespace Hazard_Detection
                         codeLine.Add(n);
                     }
                 }
-
+                // if hazards were found, add to string
                 if (codeLine.Count() > 0)
                 {
                     output += i + " uses as a source:";
@@ -721,22 +729,26 @@ namespace Hazard_Detection
                     {
                         output += " " + num;
                     }
+                    // output string
                     output += ". Be careful when executing out-of-order.";
                     warn.Items.Add(output);
                 }
             }
         }
+        // method to clear all fields and lists
         private void clear_Click(object sender, RoutedEventArgs e)
         {
             // clear gui elements
             mips.Clear();
             notOpt.Items.Clear();
             opt.Items.Clear();
+            warn.Items.Clear();
 
             // clear all lists
             cpu.Pipeline.Clear();
             cpu.Stalled.Clear();
             cpu.Forwarding.Clear();
+            cpu.Hazards.Clear();
         }
     }
 }

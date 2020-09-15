@@ -39,7 +39,7 @@
             </Grid>
             <DockPanel Margin="5,0,5,5" Height="295">
                 <Label Content="Hazards" FontSize="14" DockPanel.Dock="Top" />
-                <ListBox x:Name="warn" FontFamily="Consolas" FontSize="18" Margin="5" DockPanel.Dock="Bottom" />
+                <ListBox x:Name="warn" FontFamily="Consolas" FontSize="14" Margin="5" DockPanel.Dock="Bottom" />
             </DockPanel>
         </StackPanel>
     </Grid>
