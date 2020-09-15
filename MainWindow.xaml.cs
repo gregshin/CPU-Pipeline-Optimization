@@ -34,18 +34,18 @@ namespace Hazard_Detection
 
         private void printValidInst()
         {
-            dispInst.Items.Add("add");
-            dispInst.Items.Add("addi");
-            dispInst.Items.Add("sub");
-            dispInst.Items.Add("subi");
-            dispInst.Items.Add("div");
-            dispInst.Items.Add("divi");
-            dispInst.Items.Add("mul");
-            dispInst.Items.Add("muli");
-            dispInst.Items.Add("and");
-            dispInst.Items.Add("or");
-            dispInst.Items.Add("lw");
-            dispInst.Items.Add("sw");
+            dispInst.Items.Add("add $r1, $r2, $r3");
+            dispInst.Items.Add("addi $r1, $r2, n");
+            dispInst.Items.Add("sub $r1, $r2, $r3");
+            dispInst.Items.Add("subi $r1, $r2, n");
+            dispInst.Items.Add("div $r1, $r2, $r3");
+            dispInst.Items.Add("divi $r1, $r2, n");
+            dispInst.Items.Add("mul $r1, $r2, $r3");
+            dispInst.Items.Add("muli $r1, $r2, n");
+            dispInst.Items.Add("and $r1, $r2, $r3");
+            dispInst.Items.Add("or $r1, $r2, $r3");
+            dispInst.Items.Add("lw $r1, n($r2)");
+            dispInst.Items.Add("sw $r1, n($r2)");
         }
 
         private void submit_Click(object sender, RoutedEventArgs e)
@@ -750,7 +750,6 @@ namespace Hazard_Detection
                         wawList += ". Be careful when executing out-of-order.";
                         warn.Items.Add(wawList);
                     }
-                    
                 }
             }
         }
