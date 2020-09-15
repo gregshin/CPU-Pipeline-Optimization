@@ -88,6 +88,7 @@ namespace Hazard_Detection
             printForwarded(ref cpu);
             printRAW(ref cpu);
             printWAW(ref cpu);
+            printWAR(ref cpu);
         }
         // method to create pipeline with stalls
         public void stall(ref App.Cpu cpu)
@@ -644,9 +645,9 @@ namespace Hazard_Detection
 
                 if (!waw.Contains(currDest))
                 {
-                    string wawList = "Warning: Potential WAW hazard on lines ";
+                    string wawList = "Warning: Potential WAW hazard. The following lines have the same destination:";
 
-                    waw.Add(currDest);
+                    
                     // check all instructions that come later
                     for (int n = i + 1; n < cpu.Pipeline.Count(); n++)
                     {
@@ -655,6 +656,7 @@ namespace Hazard_Detection
                         // if there is a WAW
                         if (currDest == nextDest)
                         {
+                            waw.Add(currDest);
                             // if the current codeline isn't already in the list
                             if (!codeLine.Contains(i))
                             {
@@ -671,16 +673,59 @@ namespace Hazard_Detection
                         // iterate through and add to wawList
                         foreach (int line in codeLine)
                         {
-                            wawList += line + " ";
+                            wawList += " " + line;
                         }
                         // add to the hazard warnings list
+                        wawList += ". Be careful when executing out-of-order.";
                         warn.Items.Add(wawList);
                     }
                     
                 }
             }
         }
+        //method to dectect and print WAR hazards
+        private void printWAR(ref App.Cpu cpu)
+        {
+            // iterate through the instruction list
+            for (int i = 0; i < cpu.Pipeline.Count(); i++)
+            {
+                string currSrc1 = cpu.Pipeline[i].srcReg1;
+                string currSrc2 = null;
+                string output = "Warning: Potential WAR hazard. The following lines have a destination register that line ";
+                List<int> codeLine = new List<int>();
 
+                if (cpu.Pipeline[i] is App.RType rtype)
+                {
+                    currSrc2 = rtype.srcReg2;
+                }
+                else if (cpu.Pipeline[i] is App.Store store)
+                {
+                    currSrc2 = store.srcReg2;
+                }
+
+                for (int n = 0; n < cpu.Pipeline.Count(); n++)
+                {
+                    string dest = cpu.Pipeline[n].destReg;
+
+                    if (i != n && (dest == currSrc1 || dest == currSrc2))
+                    {
+                        codeLine.Add(n);
+                    }
+                }
+
+                if (codeLine.Count() > 0)
+                {
+                    output += i + " uses as a source:";
+
+                    foreach (int num in codeLine)
+                    {
+                        output += " " + num;
+                    }
+                    output += ". Be careful when executing out-of-order.";
+                    warn.Items.Add(output);
+                }
+            }
+        }
         private void clear_Click(object sender, RoutedEventArgs e)
         {
             // clear gui elements
