@@ -37,7 +37,7 @@ namespace Hazard_Detection
             dispInst.Items.Add("add");
             dispInst.Items.Add("addi");
             dispInst.Items.Add("sub");
-            dispInst.Items.Add("subu");
+            dispInst.Items.Add("subi");
             dispInst.Items.Add("div");
             dispInst.Items.Add("divi");
             dispInst.Items.Add("mul");
@@ -66,17 +66,33 @@ namespace Hazard_Detection
                 {
                     cpu.Pipeline.Add(new App.RType("add", parts[1], parts[2], parts[3]));
                 }
+                if (parts[0] == "addi")
+                {
+                    cpu.Pipeline.Add(new App.RType("addi", parts[1], parts[2], parts[3]));
+                }
                 else if (parts[0] == "sub")
                 {
                     cpu.Pipeline.Add(new App.RType("sub", parts[1], parts[2], parts[3]));
+                }
+                else if (parts[0] == "subi")
+                {
+                    cpu.Pipeline.Add(new App.RType("subi", parts[1], parts[2], parts[3]));
                 }
                 else if (parts[0] == "div")
                 {
                     cpu.Pipeline.Add(new App.RType("div", parts[1], parts[2], parts[3]));
                 }
+                else if (parts[0] == "divi")
+                {
+                    cpu.Pipeline.Add(new App.RType("divi", parts[1], parts[2], parts[3]));
+                }
                 else if (parts[0] == "mul")
                 {
                     cpu.Pipeline.Add(new App.RType("mul", parts[1], parts[2], parts[3]));
+                }
+                else if (parts[0] == "muli")
+                {
+                    cpu.Pipeline.Add(new App.RType("muli", parts[1], parts[2], parts[3]));
                 }
                 else if (parts[0] == "and")
                 {
