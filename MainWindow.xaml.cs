@@ -47,7 +47,7 @@ namespace Hazard_Detection
             dispInst.Items.Add("lw $r1, n($r2)");
             dispInst.Items.Add("sw $r1, n($r2)");
         }
-
+        // event handler for submit button
         private void submit_Click(object sender, RoutedEventArgs e)
         {
             // split the user input by line breaks
@@ -164,8 +164,6 @@ namespace Hazard_Detection
 
                         while (safe == false && count <= 4 && i - count >= 0)
                         {
-                            //int k = cpu.Stalled[i - count].FindIndex(item => item == avail);
-
                             // what cycle mem acces is on previous cycle
                             int memAccess = cpu.Stalled[i - count].FindIndex(item => item == 'M');
 
